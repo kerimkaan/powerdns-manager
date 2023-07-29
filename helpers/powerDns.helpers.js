@@ -6,7 +6,7 @@ class PowerDNSAPI {
         this.API_URL = 'http://127.0.0.1:8081';
         this.API_KEY = '1234';
         this.headers = {
-            'X-API-KEY': this.API_KEY,
+            'X-API-Key': this.API_KEY,
             'Content-Type': 'application/json',
         };
     }
@@ -29,6 +29,7 @@ class PowerDNSAPI {
 
     async zones(serverId) {
         const url = `${this.API_URL}/api/v1/servers/${serverId}/zones`;
+        console.log(url);
         return axios.get(url, this.headers);
     }
 }
