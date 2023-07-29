@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get(
     '/',
-    m.auth.userAuth,
+    // m.auth.userAuth,
     zonesControllers.getZones,
 );
 

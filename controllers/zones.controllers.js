@@ -1,5 +1,6 @@
 const h = require('../helpers');
 const c = require('../constants');
+const { AxiosError } = require('axios');
 
 module.exports.getZones = async (req, res) => {
     try {
@@ -60,6 +61,16 @@ module.exports.createZone = async (req, res) => {
         }
         throw new Error('Unhandled situation');
     } catch (err) {
+        if (err instanceof AxiosError) {
+            if (h.httpStatus.ERROR_STATUS_CODES.includes(err.status)) {
+                return res.status(err.status).json({
+                    status: err.status,
+                    message: 'Something went wrong while creating zone',
+                    error: err.message,
+                    err,
+                });
+            }
+        }
         return res.status(h.httpStatus.INTERNAL_SERVER_ERROR).json({
             status: h.httpStatus.INTERNAL_SERVER_ERROR,
             message: 'Something went wrong',
