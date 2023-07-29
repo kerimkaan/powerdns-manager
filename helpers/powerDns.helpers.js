@@ -30,6 +30,7 @@ class PowerDNSAPI {
     async zones(serverId) {
         const url = `${this.API_URL}/api/v1/servers/${serverId}/zones`;
         console.log(url);
+        console.log(this.headers);
         return axios.get(url, this.headers);
     }
 }
