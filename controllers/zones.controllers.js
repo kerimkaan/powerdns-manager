@@ -63,7 +63,8 @@ module.exports.createZone = async (req, res) => {
     } catch (err) {
         if (err instanceof AxiosError) {
             if (h.httpStatus.ERROR_STATUS_CODES.includes(err.status)) {
-                return res.status(err.status).json({
+                console.log(err.status);
+                return res.status(Number(err.status)).json({
                     status: err.status,
                     message: 'Something went wrong while creating zone',
                     error: err.message,
