@@ -2,35 +2,21 @@ const axios = require('axios');
 
 class PowerDNSAPI {
     constructor() {
-        this.axiosInstance = this.createAxiosInstance;
-        this.API_URL = 'http://127.0.0.1:8081';
-        this.API_KEY = 1234;
+        this.API_URL = 'http://127.0.0.1:8081'; // to .env
+        this.API_KEY = 1234; // to .env
         this.headers = {
             'X-API-Key': this.API_KEY,
             'Content-Type': 'application/json',
         };
     }
 
-    createAxiosInstance() {
-        return axios.create({
-            baseURL: this.API_URL,
-            headers: {
-                'X-API-KEY': this.API_KEY,
-                'Content-Type': 'application/json',
-            },
-        });
-    }
-
     async getZones(serverId) {
-        return this.createAxiosInstance(
-            { url: `servers/${serverId}/zones` },
-        );
+        const url = `${this.API_URL}/api/v1/servers/${serverId}/zones`;
+        return axios.get(url, { headers: this.headers });
     }
 
-    async zones(serverId) {
-        const url = `${this.API_URL}/api/v1/servers/${serverId}/zones`;
-        console.log(url);
-        console.log(this.headers);
+    async getZoneDetails(serverId, zoneName) {
+        const url = `${this.API_URL}/api/v1/servers/${serverId}/zones/${zoneName}`;
         return axios.get(url, { headers: this.headers });
     }
 }

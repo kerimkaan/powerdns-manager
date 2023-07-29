@@ -10,4 +10,9 @@ router.get(
     zonesControllers.getZones,
 );
 
+router.get(
+    '/zone/:zoneName',
+    zonesControllers.getZoneDetail,
+);
+
 module.exports = router;
