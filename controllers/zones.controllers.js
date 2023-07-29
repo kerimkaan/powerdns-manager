@@ -53,6 +53,33 @@ module.exports.createZone = async (req, res) => {
         console.log(status);
         if (!data) throw new Error('Can not create zone');
         if (status === 201 || status === 200) {
+            const keyName = `ownedZones:${req.headers.username}`;
+            await h.redis.addToSet(keyName, zoneName);
+            return res.status(h.httpStatus.OK).json({
+                status: h.httpStatus.OK,
+                message: 'Success',
+                records: data,
+            });
+        }
+        throw new Error('Unhandled situation');
+    } catch (err) {
+        return res.status(h.httpStatus.INTERNAL_SERVER_ERROR).json({
+            status: h.httpStatus.INTERNAL_SERVER_ERROR,
+            message: 'Something went wrong',
+            error: err.message,
+            err,
+        });
+    }
+};
+
+module.exports.deleteZone = async (req, res) => {
+    try {
+        const { zoneName } = req.params;
+        if (!zoneName) throw new Error('Must be provide zoneName');
+        const { data, status } = await h.powerDns.deleteZone(c.powerDns.serverId, zoneName);
+        console.log(status);
+        if (!data) throw new Error('Can not delete zone');
+        if (status === 204 || status === 200) {
             return res.status(h.httpStatus.OK).json({
                 status: h.httpStatus.OK,
                 message: 'Success',

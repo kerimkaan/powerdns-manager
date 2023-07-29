@@ -37,7 +37,6 @@ class PowerDNSAPI {
         if (!body.name || !body.nameServers) throw new Error('Name and nameservers must be specified');
         if (!Array.isArray(body.nameServers)) throw new Error('Nameservers must be an array');
         const dottedNameServers = body.nameServers.map((value) => textHelper.addDot(value));
-        console.log(dottedNameServers);
         const reqBody = {
             name: textHelper.addDot(body.name),
             kind: 'Native',
@@ -46,6 +45,11 @@ class PowerDNSAPI {
         };
         const url = `${this.API_URL}/api/v1/servers/${serverId}/zones`;
         return axios.post(url, reqBody, { headers: this.headers });
+    }
+
+    async deleteZone(serverId = '', zoneName = '') {
+        const url = `${this.API_URL}/api/v1/servers/${serverId}/zones/${zoneName}`;
+        return axios.delete(url, { headers: this.headers });
     }
 }
 

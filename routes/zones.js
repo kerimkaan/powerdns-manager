@@ -21,4 +21,10 @@ router.post(
     zonesControllers.createZone,
 );
 
+router.delete(
+    '/:zoneName',
+    // m.auth.userAuth,
+    zonesControllers.deleteZone,
+);
+
 module.exports = router;
