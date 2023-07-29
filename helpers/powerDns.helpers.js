@@ -4,7 +4,7 @@ class PowerDNSAPI {
     constructor() {
         this.axiosInstance = this.createAxiosInstance;
         this.API_URL = 'http://127.0.0.1:8081';
-        this.API_KEY = '1234';
+        this.API_KEY = 1234;
         this.headers = {
             'X-API-Key': this.API_KEY,
             'Content-Type': 'application/json',
