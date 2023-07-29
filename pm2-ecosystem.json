@@ -1,0 +1,14 @@
+{
+    "apps": [
+        {
+            "exec_mode": "cluster",
+            "name": "powerdns-manager",
+            "env": {
+                "NODE_ENV": "production",
+                "SERVER_PORT": 3000
+            },
+            "script": "/opt/powerdns-manager/bin/www.js",
+            "node_args": []
+        }
+    ]
+}
