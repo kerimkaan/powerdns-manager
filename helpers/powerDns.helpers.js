@@ -36,7 +36,7 @@ class PowerDNSAPI {
     async createZone(serverId, body) {
         if (!body.name || !body.nameServers) throw new Error('Name and nameservers must be specified');
         if (!Array.isArray(body.nameServers)) throw new Error('Nameservers must be an array');
-        const dottedNameServers = body.nameServer.map((value) => textHelper.addDot(value));
+        const dottedNameServers = body.nameServers.map((value) => textHelper.addDot(value));
         console.log(dottedNameServers);
         const reqBody = {
             name: textHelper.addDot(body.name),
