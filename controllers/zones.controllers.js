@@ -61,17 +61,6 @@ module.exports.createZone = async (req, res) => {
         }
         throw new Error('Unhandled situation');
     } catch (err) {
-        if (err instanceof AxiosError) {
-            if (h.httpStatus.ERROR_STATUS_CODES.includes(err.status)) {
-                console.log(err.status);
-                return res.status(Number(err.status)).json({
-                    status: err.status,
-                    message: 'Something went wrong while creating zone',
-                    error: err.message,
-                    err,
-                });
-            }
-        }
         return res.status(h.httpStatus.INTERNAL_SERVER_ERROR).json({
             status: h.httpStatus.INTERNAL_SERVER_ERROR,
             message: 'Something went wrong',
