@@ -6,13 +6,19 @@ const router = express.Router();
 
 router.get(
     '/',
-    // m.auth.userAuth,
+    m.auth.userAuth,
     zonesControllers.getZones,
 );
 
 router.get(
-    '/zone/:zoneName',
+    '/detail/:zoneName',
+    // m.auth.userAuth,
     zonesControllers.getZoneDetail,
+);
+
+router.post(
+    '/',
+    zonesControllers.createZone,
 );
 
 module.exports = router;

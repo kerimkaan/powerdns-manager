@@ -38,3 +38,33 @@ module.exports.getZoneDetail = async (req, res) => {
         });
     }
 };
+
+module.exports.createZone = async (req, res) => {
+    try {
+        const { zoneName, nameServers, masters } = req.body;
+        if (!zoneName || !nameServers) throw new Error('Must be provide zoneName and nameServers');
+        if (!Array.isArray(nameServers)) throw new Error('nameServers must be an array');
+        const { data, status } = await h.powerDns.createZone(c.powerDns.serverId, {
+            name: zoneName,
+            nameServers,
+            masters,
+        });
+        console.log(status);
+        if (!data) throw new Error('Can not create zone');
+        if (status === 201 || status === 200) {
+            return res.status(h.httpStatus.OK).json({
+                status: h.httpStatus.OK,
+                message: 'Success',
+                records: data,
+            });
+        }
+        throw new Error('Unhandled situation');
+    } catch (err) {
+        return res.status(h.httpStatus.INTERNAL_SERVER_ERROR).json({
+            status: h.httpStatus.INTERNAL_SERVER_ERROR,
+            message: 'Something went wrong',
+            error: err.message,
+            err,
+        });
+    }
+};
