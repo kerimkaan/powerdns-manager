@@ -2,13 +2,13 @@ const h = require('../helpers');
 
 module.exports.getZones = async (req, res) => {
     try {
-        const zones = await h.powerDns.zones('localhost');
-        console.log(zones);
-        if (!zones) throw new Error('No zones in server');
+        const { data } = await h.powerDns.zones('localhost');
+        console.log(data);
+        if (!data) throw new Error('No zones in server');
         return res.status(h.httpStatus.OK).json({
             status: h.httpStatus.OK,
             message: 'Success',
-            zones,
+            zones: data,
         });
     }
     catch (err) {
