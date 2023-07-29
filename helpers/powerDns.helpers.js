@@ -41,7 +41,7 @@ class PowerDNSAPI {
             masters: body.masters || [],
             nameservers: body.nameServers || [],
         };
-        const url = `${this.API_URL}/api/v1/server/${serverId}/zones`;
+        const url = `${this.API_URL}/api/v1/servers/${serverId}/zones`;
         return axios.post(url, reqBody, { headers: this.headers });
     }
 }
