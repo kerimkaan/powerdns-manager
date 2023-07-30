@@ -79,7 +79,7 @@ class PowerDNSAPI {
         if (isNotValid) {
             throw new Error('Invalid rrsets');
         }
-        const manipulation = (record) => ({ ...record, name: textHelper.addDot(record.name) });
+        const manipulation = (record) => {return { ...record, name: textHelper.addDot(record.name) }};
         const dottedRecords = records.forEach(manipulation);
         console.log(dottedRecords);
         const url = `${this.API_URL}/api/v1/servers/${serverId}/zones/${zoneName}`;
