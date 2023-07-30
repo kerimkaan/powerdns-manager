@@ -1,4 +1,4 @@
-FROM node:20-bullseye
+FROM node:20-bullseye-slim
 RUN mkdir -p /opt/powerdns-manager
 WORKDIR /opt/powerdns-manager
 COPY package*.json ./
