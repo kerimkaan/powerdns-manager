@@ -73,7 +73,6 @@ class PowerDNSAPI {
     } */
     async newRecordsToZone(serverId = '', zoneName = '', records = []) {
         if (!serverId || !zoneName || !records) throw new Error('Invalid parameters');
-        const url = `${this.API_URL}/api/v1/servers/${serverId}/zone/${zoneName}`;
         const isNotValid = records.some(
             (record) => !record.name || !record.type || !record.changetype || !record.records,
         );
@@ -85,6 +84,7 @@ class PowerDNSAPI {
             name: textHelper.addDot(record.name),
         }));
         console.log(records);
+        const url = `${this.API_URL}/api/v1/servers/${serverId}/zone/${textHelper.addDot(zoneName)}`;
         return axios.patch(url, { rrsets: records }, { headers: this.headers });
     }
 }
