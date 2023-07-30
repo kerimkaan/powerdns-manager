@@ -2,7 +2,6 @@ const helpers = require('../helpers');
 
 module.exports.userAuth = async (req, res, next) => {
     try {
-        console.log(req.headers.username);
         if (!req.headers.username || !req.headers.password) throw new Error('You must provide password and username');
         const { username, password } = req.headers;
         // Is user exists?
@@ -16,6 +15,29 @@ module.exports.userAuth = async (req, res, next) => {
         return res.status(helpers.httpStatus.UNAUTHORIZED).json({
             status: helpers.httpStatus.UNAUTHORIZED,
             message: 'Authentication failed',
+            error: error.message,
+        });
+    }
+};
+
+module.exports.hasOwnResource = async (req, res, next) => {
+    try {
+        const zoneName = req.params.zoneName || req.query.zoneName || req.body.zoneName;
+        if (!zoneName) throw new Error('The resource name can not provided');
+        const keyName = `ownedZones:${req.headers.username}`;
+        const checkInRedis = await helpers.redis.isMemberOfSet(keyName, zoneName);
+        if (!checkInRedis) {
+            return res.status(helpers.httpStatus.UNAUTHORIZED).json({
+                status: helpers.httpStatus.UNAUTHORIZED,
+                message: 'You can get only owned resources',
+            });
+        }
+        console.log('checkInRedis', checkInRedis);
+        return next();
+    } catch (error) {
+        return res.status(helpers.httpStatus.UNAUTHORIZED).json({
+            status: helpers.httpStatus.UNAUTHORIZED,
+            message: 'Unauthorized',
             error: error.message,
         });
     }

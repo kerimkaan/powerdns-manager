@@ -83,7 +83,6 @@ class PowerDNSAPI {
             ...record,
             name: textHelper.addDot(record.name),
         }));
-        console.log(dottedRecords);
         const url = `${this.API_URL}/api/v1/servers/${serverId}/zones/${zoneName}`;
         return axios.patch(url, { rrsets: dottedRecords }, { headers: this.headers });
     }

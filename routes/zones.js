@@ -29,7 +29,8 @@ router.delete(
 
 router.patch(
     '/:zoneName',
-    // m.auth.userAuth,
+    m.auth.userAuth,
+    m.auth.hasOwnResource,
     zonesControllers.patchZone,
 );
 
