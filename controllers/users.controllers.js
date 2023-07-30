@@ -38,7 +38,7 @@ module.exports.createUser = async (req, res) => {
             });
         }
         return res.status(helpers.httpStatus.CONFLICT).json({
-            status: helpers.httpStatus.OK,
+            status: helpers.httpStatus.CONFLICT,
             message: 'Username is already exists',
             username,
         });
