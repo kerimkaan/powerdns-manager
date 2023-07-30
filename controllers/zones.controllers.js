@@ -101,7 +101,7 @@ module.exports.patchZone = async (req, res) => {
         const { zoneName } = req.params;
         const { records } = req.body;
         if (!zoneName || !records) throw new Error('Must be provide zoneName and body');
-        if (Array.isArray(records)) throw new Error('records field must be an array');
+        if (!Array.isArray(records)) throw new Error('records field must be an array');
         // eslint-disable-next-line no-unused-vars
         const { status } = await h.powerDns.newRecordsToZone(
             c.powerDns.serverId,
