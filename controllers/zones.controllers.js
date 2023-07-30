@@ -83,7 +83,6 @@ module.exports.deleteZone = async (req, res) => {
             return res.status(h.httpStatus.OK).json({
                 status: h.httpStatus.OK,
                 message: 'Success',
-                records: data,
             });
         }
         throw new Error('Unhandled situation');
