@@ -9,6 +9,12 @@ It's a simple backend for manage PowerDNS with user credentials.
 
 Tested in Ubuntu 22.04
 
+## Installations
+
+```bash
+docker run -d --network host --name powerdns-manager kerimkaan/powerdns-manager:latest
+```
+
 ## Services
 
 ### Users
@@ -145,12 +151,6 @@ Example Body:
   }
  ]
 }
-```
-
-## Installations
-
-```bash
-docker run -d --network host --name powerdns-manager kerimkaan/powerdns-manager:latest
 ```
 
 ## Development
