@@ -1,6 +1,5 @@
 const h = require('../helpers');
 const c = require('../constants');
-const { AxiosError } = require('axios');
 
 module.exports.getZones = async (req, res) => {
     try {
@@ -76,10 +75,40 @@ module.exports.deleteZone = async (req, res) => {
     try {
         const { zoneName } = req.params;
         if (!zoneName) throw new Error('Must be provide zoneName');
+        // eslint-disable-next-line no-unused-vars
         const { data, status } = await h.powerDns.deleteZone(c.powerDns.serverId, zoneName);
         if (status === 204) {
             const keyName = `ownedZones:${req.headers.username}`;
             await h.redis.removeFromSet(keyName, zoneName);
+            return res.status(h.httpStatus.OK).json({
+                status: h.httpStatus.OK,
+                message: 'Success',
+            });
+        }
+        throw new Error('Unhandled situation');
+    } catch (err) {
+        return res.status(h.httpStatus.INTERNAL_SERVER_ERROR).json({
+            status: h.httpStatus.INTERNAL_SERVER_ERROR,
+            message: 'Something went wrong',
+            error: err.message,
+            err,
+        });
+    }
+};
+
+module.exports.patchZone = async (req, res) => {
+    try {
+        const { zoneName } = req.params;
+        const { records } = req.body;
+        if (!zoneName || !records) throw new Error('Must be provide zoneName and body');
+        if (Array.isArray(records)) throw new Error('records field must be an array');
+        // eslint-disable-next-line no-unused-vars
+        const { status } = await h.powerDns.newRecordsToZone(
+            c.powerDns.serverId,
+            zoneName,
+            records,
+        );
+        if (status === 204) {
             return res.status(h.httpStatus.OK).json({
                 status: h.httpStatus.OK,
                 message: 'Success',

@@ -27,4 +27,10 @@ router.delete(
     zonesControllers.deleteZone,
 );
 
+router.patch(
+    '/:zoneName',
+    // m.auth.userAuth,
+    zonesControllers.patchZone,
+);
+
 module.exports = router;

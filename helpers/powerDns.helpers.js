@@ -51,6 +51,42 @@ class PowerDNSAPI {
         const url = `${this.API_URL}/api/v1/servers/${serverId}/zones/${zoneName}`;
         return axios.delete(url, { headers: this.headers });
     }
+
+    // Example:
+    /* {
+        "rrsets":
+        [
+            {
+                "name": "test.example.org.",
+                "type": "A",
+                "ttl": 3600,
+                "changetype": "REPLACE",
+                "records":
+                [
+                    {
+                        "content": "192.168.0.5",
+                        "disabled": false
+                    }
+                ]
+            }
+        ]
+    } */
+    async newRecordsToZone(serverId = '', zoneName = '', records = []) {
+        if (!serverId || !zoneName || !records) throw new Error('Invalid parameters');
+        const url = `${this.API_URL}/api/v1/servers/${serverId}/zone/${zoneName}`;
+        const isNotValid = records.some(
+            (record) => !record.name || !record.type || !record.changetype || !record.records,
+        );
+        if (isNotValid) {
+            throw new Error('Invalid rrsets');
+        }
+        records.forEach((record) => ({
+            ...record,
+            name: textHelper.addDot(record.name),
+        }));
+        console.log(records);
+        return axios.patch(url, { rrsets: records }, { headers: this.headers });
+    }
 }
 
 module.exports = new PowerDNSAPI();
