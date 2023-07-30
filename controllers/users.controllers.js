@@ -27,11 +27,19 @@ module.exports.createUser = async (req, res) => {
     try {
         const { username, password } = req.body;
         if (!username || !password) throw new Error('Invalid username or password');
-        await helpers.redis.hSet('users', username, password);
-        await helpers.redis.addToSet('users-set', username);
-        return res.status(helpers.httpStatus.OK).json({
+        const isExists = await helpers.redis.isMemberOfSet('users-set', username);
+        if (!isExists) {
+            await helpers.redis.hSet('users', username, password);
+            await helpers.redis.addToSet('users-set', username);
+            return res.status(helpers.httpStatus.OK).json({
+                status: helpers.httpStatus.OK,
+                message: 'Successfully created',
+                username,
+            });
+        }
+        return res.status(helpers.httpStatus.CONFLICT).json({
             status: helpers.httpStatus.OK,
-            message: 'Successfully created',
+            message: 'Username is already exists',
             username,
         });
     } catch (error) {

@@ -49,7 +49,6 @@ module.exports.createZone = async (req, res) => {
             nameServers,
             masters,
         });
-        console.log(status);
         if (!data) throw new Error('Can not create zone');
         if (status === 201 || status === 200) {
             const keyName = `ownedZones:${req.headers.username}`;

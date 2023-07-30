@@ -32,7 +32,6 @@ module.exports.hasOwnResource = async (req, res, next) => {
                 message: 'You can get only owned resources',
             });
         }
-        console.log('checkInRedis', checkInRedis);
         return next();
     } catch (error) {
         return res.status(helpers.httpStatus.UNAUTHORIZED).json({
