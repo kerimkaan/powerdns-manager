@@ -84,7 +84,7 @@ class PowerDNSAPI {
             name: textHelper.addDot(record.name),
         }));
         console.log(records);
-        const url = `${this.API_URL}/api/v1/servers/${serverId}/zone/${textHelper.addDot(zoneName)}`;
+        const url = `${this.API_URL}/api/v1/servers/${serverId}/zones/${textHelper.addDot(zoneName)}`;
         return axios.patch(url, { rrsets: records }, { headers: this.headers });
     }
 }
