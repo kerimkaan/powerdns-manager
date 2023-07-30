@@ -23,4 +23,6 @@ module.exports.getSet = async (key) => client.sMembers(key);
 
 module.exports.addToSet = async (key, value) => client.sAdd(key, value);
 
+module.exports.removeFromSet = async (key, value) => client.sRem(key, value);
+
 module.exports.isMemberOfSet = async (key, member) => client.sIsMember(key, member);

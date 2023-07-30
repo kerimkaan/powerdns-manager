@@ -77,9 +77,9 @@ module.exports.deleteZone = async (req, res) => {
         const { zoneName } = req.params;
         if (!zoneName) throw new Error('Must be provide zoneName');
         const { data, status } = await h.powerDns.deleteZone(c.powerDns.serverId, zoneName);
-        console.log(status);
-        if (!data) throw new Error('Can not delete zone');
-        if (status === 204 || status === 200) {
+        if (status === 204) {
+            const keyName = `ownedZones:${req.headers.username}`;
+            await h.redis.removeFromSet(keyName, zoneName);
             return res.status(h.httpStatus.OK).json({
                 status: h.httpStatus.OK,
                 message: 'Success',
