@@ -1,22 +1,23 @@
 const axios = require('axios');
 const textHelper = require('./text.helpers');
+const { powerDns: pDnsConstants } = require('../constants');
 
 class PowerDNSAPI {
     constructor() {
-        this.API_URL = 'http://127.0.0.1:8081'; // to .env
-        this.API_KEY = 1234; // to .env
+        this.API_URL = pDnsConstants.API_URL;
+        this.API_KEY = pDnsConstants.API_KEY;
         this.headers = {
             'X-API-Key': this.API_KEY,
             'Content-Type': 'application/json',
         };
     }
 
-    async getZones(serverId) {
+    async getZones(serverId = 'localhost') {
         const url = `${this.API_URL}/api/v1/servers/${serverId}/zones`;
         return axios.get(url, { headers: this.headers });
     }
 
-    async getZoneDetails(serverId, zoneName) {
+    async getZoneDetails(serverId = 'localhost', zoneName = '') {
         const url = `${this.API_URL}/api/v1/servers/${serverId}/zones/${zoneName}`;
         return axios.get(url, { headers: this.headers });
     }
@@ -33,7 +34,7 @@ class PowerDNSAPI {
             "ns2.example.org."
         ]
     } */
-    async createZone(serverId, body) {
+    async createZone(serverId = 'localhost', body = {}) {
         if (!body.name || !body.nameServers) throw new Error('Name and nameservers must be specified');
         if (!Array.isArray(body.nameServers)) throw new Error('Nameservers must be an array');
         const dottedNameServers = body.nameServers.map((value) => textHelper.addDot(value));
@@ -47,7 +48,7 @@ class PowerDNSAPI {
         return axios.post(url, reqBody, { headers: this.headers });
     }
 
-    async deleteZone(serverId = '', zoneName = '') {
+    async deleteZone(serverId = 'localhost', zoneName = '') {
         const url = `${this.API_URL}/api/v1/servers/${serverId}/zones/${zoneName}`;
         return axios.delete(url, { headers: this.headers });
     }
@@ -71,7 +72,7 @@ class PowerDNSAPI {
             }
         ]
     } */
-    async newRecordsToZone(serverId = '', zoneName = '', records = []) {
+    async newRecordsToZone(serverId = 'localhost', zoneName = '', records = []) {
         if (!serverId || !zoneName || !records) throw new Error('Missing parameters');
         const isNotValid = records.some(
             (record) => !record.name || !record.type || !record.changetype || !record.records,
